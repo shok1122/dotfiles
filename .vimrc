@@ -16,10 +16,11 @@ let g:neobundle_default_git_protocol='https'
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 " インストールするプラグイン
-NeoBundle 'Shougo/neocomplcache.vim'
+"NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'osyo-manga/vim-marching'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tyru/caw.vim'
@@ -111,7 +112,7 @@ nnoremap <silent> [unite]u :<C-u>Unite file_mru buffer<CR>
 nnoremap <silent> [unite]y :<C-u>Unite history/yank<CR>
 nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
 "-- unite-outline
-nnoremap <silent> [unite]o :<C-u>Unite outline
+nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
 "-- unite-include
 nnoremap <silent> [unite]i :<C-u>Unite file_include<CR>
 
