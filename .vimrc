@@ -1,8 +1,5 @@
 " , をleaderに（,は\に退避）
 let mapleader=","
-noremap <Space>l $
-noremap <Space>h ^
-nnoremap <Space>/ *
 
 " =============================================================
 "  NeoBundle
@@ -76,14 +73,34 @@ nnoremap sq :<C-u>q<CR>
 nnoremap sQ :<C-u>bd<CR>
 
 " =============================================================
+"  shift+* command
+"    prefix: <Space>
+" =============================================================
+" 行末
+nnoremap <Space>l $
+" 行頭
+nnoremap <Space>h ^
+" 1行目
+nnoremap <Space>j G
+" 最終行
+nnoremap <Space>k gg
+" grep結果 次へ
+nnoremap <Space>p :<C-u>cprev<CR>
+" grep結果 前へ
+nnoremap <Space>n :<C-u>cnext<CR>
+" カーソル下の文字列を検索
+nnoremap <Space>/ *
+
+" =============================================================
 "  unite
 "    prefix: ,
 " =============================================================
 let g:unite_enable_start_insert=1
 let g:unite_source_history_yank_enable=1
 let g:unite_source_file_mru_limit=200
-let g:unite_enable_split_vertically=1 " 縦分割で開く
-let g:unite_winwidth=40 " 縦幅40で開く
+let g:unite_enable_split_vertically=0 " 横分割で開く
+"let g:unite_winwidth=40 " 縦幅40で開く
+let g:unite_winheight=10
 nnoremap [unite] <NOP>
 nmap <Leader>f [unite]
 nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
@@ -97,6 +114,33 @@ nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline
 "-- unite-include
 nnoremap <silent> [unite]i :<C-u>Unite file_include<CR>
+
+" =============================================================
+"  unite-tag
+" =============================================================
+"autocmd BufEnter *
+"\	if empty(&buftype)
+"\|		nnoremap <buffer> <C-]> :<C-u>:UniteWithCursorWord -immediately tag<CR>
+"\|	endif
+
+command!
+    \ -nargs=? PopupTags
+    "\ call <SID>TagsUpdate()
+    \ |Unite tag:<args>
+
+function! s:get_func_name(word)
+	let end = match(a:word, '<\|[\|(')
+	return end == -1 ? a:word : a:word[ : end-1 ]
+endfunction
+
+" カーソル下のワード(word)で絞り込み
+" noremap <silent> g<C-]> :<C-u>execute "PopupTags ".expand('<cword>')<CR>
+
+" カーソル下のワード(WORD)で ( か < か [ までが現れるまでで絞り込み
+" 例)
+" boost::array<std::stirng... → boost::array で絞り込み
+noremap <silent> G<C-]> :<C-u>execute "PopupTags "
+	\.substitute(<SID>get_func_name(expand('<cWORD>')), '\:', '\\\:', "g")<CR>
 
 " =============================================================
 "  neocomplete.vim
