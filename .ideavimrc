@@ -1,0 +1,45 @@
+" =============================================================
+"  window 
+"    prefix: s
+" =============================================================
+nnoremap s <Nop>
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
+nnoremap sh <C-w>h
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sL <C-w>L
+nnoremap sH <C-w>H
+nnoremap sn gt
+nnoremap sp gT
+nnoremap sr <C-w>r
+nnoremap s= <C-w>=
+nnoremap sw <C-w>w
+nnoremap so <C-w>_<C-w>|
+nnoremap sO <C-w>=
+nnoremap sN :<C-u>bn<CR>
+nnoremap sP :<C-u>bp<CR>
+nnoremap st :<C-u>tabnew<CR>
+nnoremap ss :<C-u>sp<CR>
+nnoremap sv :<C-u>vs<CR>
+nnoremap sq :<C-u>q<CR>
+nnoremap sQ :<C-u>bd<CR>
+" =============================================================
+"  shift+* command
+"    prefix: <Space>
+" =============================================================
+" 行末
+nnoremap <Space>l $
+" 行頭
+nnoremap <Space>h ^
+" 1行目
+nnoremap <Space>j G
+" 最終行
+nnoremap <Space>k gg
+" grep結果 次へ
+nnoremap <Space>p :<C-u>cprev<CR>
+" grep結果 前へ
+nnoremap <Space>n :<C-u>cnext<CR>
+" カーソル下の文字列を検索
+nnoremap <Space>/ *
