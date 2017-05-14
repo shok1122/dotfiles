@@ -1,49 +1,47 @@
-" , をleaderに（,は\に退避）
-let mapleader=","
+let mapleader="\<Space>"
 
-" =============================================================
-"  NeoBundle
-" =============================================================
-if has('vim_starting')
-	" 初回起動時のみruntimepathにneobundleのパスを指定する
-	set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-
-" デフォルトのプロトコルを'https'に変更
-let g:neobundle_default_git_protocol='https'
-
-" neobundleを初期化
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" インストールするプラグイン
-"NeoBundle 'Shougo/neocomplcache.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'osyo-manga/vim-marching'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'tyru/caw.vim'
-NeoBundle 't9md/vim-quickhl'
-call neobundle#end()
-
-" ファイルタイプ別のプラグイン／インデントを有効にする
-filetype plugin indent on
-
-" =============================================================
-"  appearance
-" =============================================================
-" タブ関連
-set tabstop=4
-set shiftwidth=4
-" 制御文字関連
-set list
-set listchars=eol:$,tab:>\ 
-" 行番号表示
 set number
-" シンタックス表示
-syntax on
-set autochdir
+set title
+set ambiwidth=double
+set tabstop=4
+set noexpandtab
+set shiftwidth=4
+set smartindent
+set list
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+set nrformats-=octal
+set history=50
+set wildmenu
+
+" =============================================================
+"  save 
+"    prefix: <Leader>
+" =============================================================
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>q :wq<CR>
+
+" =============================================================
+"  copy 
+"    prefix: <Leader>
+" =============================================================
+nmap <Leader>y yiw
+nmap <Leader>( yi(
+nmap <Leader>< yi<
+nmap <Leader>" yi"
+nmap <Leader>ay yaw
+nmap <Leader>a( ya(
+nmap <Leader>a< ya<
+nmap <Leader>a" ya"
+
+" =============================================================
+"  move 
+"    prefix: <Leader>
+" =============================================================
+nmap <Leader>l $
+nmap <Leader>h ^
+nmap <Leader>j G
+nmap <Leader>k gg
+nmap <Leader>/ *
 
 " =============================================================
 "  window 
@@ -54,135 +52,192 @@ nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
 nnoremap sh <C-w>h
-nnoremap sJ <C-w>J
-nnoremap sK <C-w>K
-nnoremap sL <C-w>L
-nnoremap sH <C-w>H
 nnoremap sn gt
 nnoremap sp gT
-nnoremap sr <C-w>r
-nnoremap s= <C-w>=
-nnoremap sw <C-w>w
-nnoremap so <C-w>_<C-w>|
-nnoremap sO <C-w>=
-nnoremap sN :<C-u>bn<CR>
-nnoremap sP :<C-u>bp<CR>
 nnoremap st :<C-u>tabnew<CR>
 nnoremap ss :<C-u>sp<CR>
 nnoremap sv :<C-u>vs<CR>
 nnoremap sq :<C-u>q<CR>
-nnoremap sQ :<C-u>bd<CR>
 
 " =============================================================
-"  shift+* command
-"    prefix: <Space>
+"  coding 
 " =============================================================
-" 行末
-nnoremap <Space>l $
-" 行頭
-nnoremap <Space>h ^
-" 1行目
-nnoremap <Space>j G
-" 最終行
-nnoremap <Space>k gg
-" grep結果 次へ
-nnoremap <Space>p :<C-u>cprev<CR>
-" grep結果 前へ
-nnoremap <Space>n :<C-u>cnext<CR>
-" カーソル下の文字列を検索
-nnoremap <Space>/ *
+if has("path_extra")
+	set tags+=tags;
+endif
 
 " =============================================================
-"  unite
-"    prefix: ,
+"  neobundle 
+" =============================================================
+" neobundle settings {{{
+if has('vim_starting')
+	set nocompatible
+	" neobundle をインストールしていない場合は自動インストール
+	if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
+		echo "install neobundle..."
+		" vim からコマンド呼び出しているだけ neobundle.vim のクローン
+		:call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+	endif
+	" runtimepath の追加は必須
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+call neobundle#begin(expand('~/.vim/bundle'))
+let g:neobundle_default_git_protocol='https'
+
+" neobundle#begin - neobundle#end の間に導入するプラグインを記載します。
+NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim', {
+	\ 'depends' : 'Shougo/unite.vim'
+	\ }
+NeoBundle 'Shougo/vimproc', {
+	\ 'build' : {
+	\     'windows' : 'make -f make_mingw32.mak',
+	\     'cygwin' : 'make -f make_cygwin.mak',
+	\     'mac' : 'make -f make_mac.mak',
+	\     'unix' : 'make -f make_unix.mak',
+	\    },
+	\ }
+if has('lua')
+	NeoBundleLazy 'Shougo/neocomplete.vim', {
+	\ 'depends' : 'Shougo/vimproc',
+	\ 'autoload' : { 'insert' : 1,}
+	\ }
+endif
+NeoBundleLazy 'Shougo/vimshell', {
+	\ 'depends' : 'Shougo/vimproc',
+	\ 'autoload' : {
+	\ 	'commands' : [{ 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
+	\ 	'VimShellExecute', 'VimShellInteractive',
+	\ 	'VimShellTerminal', 'VimShellPop'],
+	\ 	'mappings' : ['<Plug>(vimshell_switch)']
+	\ }}
+NeoBundle "scrooloose/syntastic"
+NeoBundleLazy "majutsushi/tagbar", {
+  \ 	"autoload": { "commands": ["TagbarToggle"]
+  \ }}
+NeoBundleLazy "scrooloose/nerdtree", {
+      \ "autoload" : { "commands": ["NERDTreeToggle"] }}
+NeoBundleLazy "wesleyche/SrcExpl", {
+      \ "autoload" : { "commands": ["SrcExplToggle"]}}
+
+" vimrcに記述されたプラグインでインストールされていないものがないかチェックする
+NeoBundleCheck
+call neobundle#end()
+filetype plugin indent on
+
+set t_Co=256
+syntax on
+colorscheme jellybeans
+
+" =============================================================
+"  neobundle 
+"      unite
 " =============================================================
 let g:unite_enable_start_insert=1
-let g:unite_source_history_yank_enable=1
-let g:unite_source_file_mru_limit=200
-let g:unite_enable_split_vertically=0 " 横分割で開く
-"let g:unite_winwidth=40 " 縦幅40で開く
-let g:unite_winheight=10
-nnoremap [unite] <NOP>
-nmap <Leader>f [unite]
-nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-"nnoremap <silent> [unite]f :<C-u>Unite file<CR>
-nnoremap <silent> [unite]f :<C-u>Unite file_rec<CR>
-nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> [unite]u :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> [unite]y :<C-u>Unite history/yank<CR>
-nnoremap <silent> [unite]t :<C-u>Unite tab<CR>
-"-- unite-outline
-nnoremap <silent> [unite]o :<C-u>Unite outline<CR>
-"-- unite-include
-nnoremap <silent> [unite]i :<C-u>Unite file_include<CR>
+nmap <silent> <C-u><C-b> :<C-u>Unite buffer<CR>
+nmap <silent> <C-u><C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nmap <silent> <C-u><C-r> :<C-u>Unite -buffer-name=register register<CR>
+nmap <silent> <C-u><C-m> :<C-u>Unite file_mru<CR>
+nmap <silent> <C-u><C-u> :<C-u>Unite buffer file_mru<CR>
+nmap <silent> <C-u><C-a> :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+au FileType unite nmap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+au FileType unite imap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+au FileType unite nmap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+au FileType unite imap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+au FileType unite nmap <silent> <buffer> <ESC><ESC> q
+au FileType unite imap <silent> <buffer> <ESC><ESC> <ESC>q
 
 " =============================================================
-"  unite-tag
+"  neobundle 
+"      neocomplete
 " =============================================================
-"autocmd BufEnter *
-"\	if empty(&buftype)
-"\|		nnoremap <buffer> <C-]> :<C-u>:UniteWithCursorWord -immediately tag<CR>
-"\|	endif
-
-command!
-    \ -nargs=? PopupTags
-    "\ call <SID>TagsUpdate()
-    \ |Unite tag:<args>
-
-function! s:get_func_name(word)
-	let end = match(a:word, '<\|[\|(')
-	return end == -1 ? a:word : a:word[ : end-1 ]
-endfunction
-
-" カーソル下のワード(word)で絞り込み
-" noremap <silent> g<C-]> :<C-u>execute "PopupTags ".expand('<cword>')<CR>
-
-" カーソル下のワード(WORD)で ( か < か [ までが現れるまでで絞り込み
-" 例)
-" boost::array<std::stirng... → boost::array で絞り込み
-noremap <silent> G<C-]> :<C-u>execute "PopupTags "
-	\.substitute(<SID>get_func_name(expand('<cWORD>')), '\:', '\\\:', "g")<CR>
+let g:neocomplete#enable_at_startup               = 1
+let g:neocomplete#auto_completion_start_length    = 3
+let g:neocomplete#enable_ignore_case              = 1
+let g:neocomplete#enable_smart_case               = 1
+let g:neocomplete#enable_camel_case               = 1
+let g:neocomplete#use_vimproc                     = 1
+let g:neocomplete#sources#buffer#cache_limit_size = 1000000
+let g:neocomplete#sources#tags#cache_limit_size   = 30000000
+let g:neocomplete#enable_fuzzy_completion         = 1
+let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
 
 " =============================================================
-"  neocomplete.vim
+"  neobundle 
+"      vimshell
 " =============================================================
-" 補完を有効に
-let g:neocomplete#enable_at_startup=1
-" 補完をスキップ
-let g:neocomplete#skip_auto_completion_time=""
+nmap <silent> vs :<C-u>VimShell<CR>
+nmap <silent> vp :<C-u>VimShellPop<CR>
 
 " =============================================================
-"  vim-marching
+"  neobundle 
+"      syntastic
 " =============================================================
-" 非同期でなく同期処理で補完
-let g:marching_backend="sync_clang_command"
-" clangのオプション
-let g:marching_clang_command_option="-std=c++1y"
-" neocomplete.vimと併用して，自動補完
-let g:marching_enable_neocomplete=1
-if !exists('g:neocomplete#force_omni_input_patterns')
-	let g:neocomplete#force_omni_input_patterns={}
+if ! empty(neobundle#get("syntastic"))
+	" Disable automatic check at file open/close
+	let g:syntastic_check_on_open=0
+	let g:syntastic_check_on_wq=0
+	" C
+	let g:syntastic_c_check_header = 1
+	" C++
+	let g:syntastic_cpp_check_header = 1
+	" Java
+	"let g:syntastic_java_javac_config_file_enabled = 1
+	"let g:syntastic_java_javac_config_file = "$HOME/.syntastic_javac_config"
 endif
-let g:neocomplete#force_omni_input_patterns.cpp =
-	\ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-" =============================================================
-"  caw.vim
-" =============================================================
-" \c でカーソル行をコメントアウト
-" 再度 \c でコメントアウトを解除，複数行も可能
-nmap \c <Plug>(caw:I:toggle)
-vmap \c <Plug>(caw:I:toggle)
-" \C でコメントアウトの解除
-nmap \C <Plug>(caw:I:uncomment)
-vmap \C <Plug>(caw:I:uncomment)
 
 " =============================================================
-"  vim-quickhl
+"  neobundle 
+"      tagbar, SrcExpl, nerdtree
 " =============================================================
-" <Space>m でカーソル下の単語，もしくは選択した範囲のハイライト
-" 再度 <Space>m でハイライトを解除
-" <Space>Mで全ハイライトを解除
-nmap <Space>m <Plug>(quickhl-manual-this)
-xmap <Space>m <Plug>(quickhl-manual-this)
-nmap <Space>M <Plug>(quickhl-manual-reset)
-xmap <Space>M <Plug>(quickhl-manual-reset)
+" tagbar {
+if ! empty(neobundle#get("tagbar"))
+	" Width (default 40)
+	let g:tagbar_width = 20
+	" Map for toggle
+	nn <silent> <leader>t :TagbarToggle<CR>
+endif
+" }
+
+" SrcExpl {
+if ! empty(neobundle#get("SrcExpl"))
+	" Set refresh time in ms
+	let g:SrcExpl_RefreshTime = 1000
+	" Is update tags when SrcExpl is opened
+	let g:SrcExpl_isUpdateTags = 0
+	" Tag update command
+	let g:SrcExpl_updateTagsCmd = 'ctags --sort=foldcase %'
+	" Update all tags
+	function! g:SrcExpl_UpdateAllTags()
+		let g:SrcExpl_updateTagsCmd = 'ctags --sort=foldcase -R .'
+		call g:SrcExpl_UpdateTags()
+		let g:SrcExpl_updateTagsCmd = 'ctags --sort=foldcase %'
+	endfunction
+	" Source Explorer Window Height
+	let g:SrcExpl_winHeight = 14
+	" Mappings
+	nn [srce] <Nop>
+	nm <Leader>E [srce]
+	nn <silent> [srce]<CR> :SrcExplToggle<CR>
+	nn <silent> [srce]u :call g:SrcExpl_UpdateTags()<CR>
+	nn <silent> [srce]a :call g:SrcExpl_UpdateAllTags()<CR>
+	nn <silent> [srce]n :call g:SrcExpl_NextDef()<CR>
+	nn <silent> [srce]p :call g:SrcExpl_PrevDef()<CR>
+endif
+" }
+
+" nerdtree {
+if ! empty(neobundle#get("nerdtree"))
+	"                                                 endif
+endif
+" }
+
+" toggle: tagbar, SrcExpl, nerdtree {
+if ! empty(neobundle#get("nerdtree")) &&
+	\! empty(neobundle#get("SrcExpl")) &&
+	\! empty(neobundle#get("tagbar"))
+	nn <silent> <Leader>A :SrcExplToggle<CR>:NERDTreeToggle<CR>:TagbarToggle<CR>
+endif
+" }
