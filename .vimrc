@@ -13,6 +13,12 @@ set nrformats-=octal
 set history=50
 set wildmenu
 
+" search {
+nmap n nzz
+nmap N Nzz
+nmap * *zz
+" }
+
 " =============================================================
 "  save 
 "    prefix: <Leader>
