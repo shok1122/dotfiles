@@ -13,6 +13,8 @@ set nrformats-=octal
 set history=50
 set wildmenu
 
+syntax on
+
 " search {
 nmap n nzz
 nmap N Nzz
