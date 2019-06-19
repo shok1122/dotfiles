@@ -67,3 +67,13 @@ nnoremap ss :<C-u>sp<CR>
 nnoremap sv :<C-u>vs<CR>
 nnoremap sq :<C-u>q<CR>
 
+if has("autocmd")
+	" ファイルタイプの検索を有効にする
+	filetype plugin on
+	" ファイルタイプに合わせたインデントを利用
+	filetype indent on
+	" 各種設定
+	" sts=softtabstop, ts=tabstop, et=expandtab
+	autocmd FileType yml,yaml setlocal sts=2 shiftwidth=2 ts=2 et
+	autocmd FileType sh setlocal sts=4 shiftwidth=4 ts=4 et
+endif
