@@ -15,12 +15,6 @@ set wildmenu
 
 syntax on
 
-" search {
-nmap n nzz
-nmap N Nzz
-nmap * *zz
-" }
-
 " =============================================================
 "  save 
 "    prefix: <Leader>
