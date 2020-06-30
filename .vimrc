@@ -14,8 +14,6 @@ set history=50
 set wildmenu
 set termguicolors
 
-colorscheme molokai
-
 syntax on
 
 " =============================================================
