@@ -8,7 +8,7 @@ set noexpandtab
 set shiftwidth=4
 set smartindent
 set list
-set listchars=tab:>-,trail:-,eol:$,extends:>,precedes:<,nbsp:%
+set listchars=tab:>\ trail:-,eol:$,extends:>,precedes:<,nbsp:%
 set nrformats-=octal
 set history=50
 set wildmenu
