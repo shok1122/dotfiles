@@ -14,7 +14,9 @@ set history=50
 set wildmenu
 set termguicolors
 
-colorscheme molokai
+let loaded_matchparen = 1
+
+colorscheme true
 
 syntax on
 
