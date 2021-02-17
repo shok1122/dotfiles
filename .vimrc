@@ -20,6 +20,9 @@ colorscheme true
 
 syntax on
 
+hi SpecialKey guifg=grey32
+hi NonText guifg=grey32
+
 " =============================================================
 "  save 
 "    prefix: <Leader>
