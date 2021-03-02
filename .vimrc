@@ -16,8 +16,6 @@ set termguicolors
 
 let loaded_matchparen = 1
 
-colorscheme true
-
 syntax on
 
 hi SpecialKey guifg=grey32
